@@ -12,13 +12,9 @@
 	"slaves-used":2,
 	"simulations":[{
 		"name":"simulation-name",
-		"bootstrap":"bootstrap-01-file.xml",
-		"state-file":"state-01-file.xml",
 		"simulation":"config-sim-01",
 	},{
 		"name":"simulation-name",
-		"bootstrap":"bootstrap-02-file.xml",
-		"state-file":"state-02-file.xml",
 		"simulation":"config-sim-02",
 	}]
 }
