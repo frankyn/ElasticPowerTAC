@@ -107,8 +107,10 @@ class ElasticPowerTAC:
 
 		# Clone ElasticPowerTAC-Master 
 		cmd_clone = ['ssh','-o StrictHostKeyChecking=no','root@%s'%self._master_ip,
-		'"git clone https://github.com/frankyn/ElasticPowerTAC-Master.git"']
+		'"git clone --recursive https://github.com/frankyn/ElasticPowerTAC-Master.git"']
 		subprocess.call(cmd_clone)
+
+
 
 		# SCP master.config.json to master server
 		cmd_mcj = ['scp',master_config_file, 
