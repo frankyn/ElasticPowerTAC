@@ -93,7 +93,7 @@ class ElasticPowerTAC:
 		# Setup master_config dict
 		master_config = {}
 		master_config['local-ip'] = self._master_ip
-		master_config['slave-name'] = "PTSlave_under_%s"%self._master_droplet
+		master_config['slave-name'] = "PTSlave-under-%s"%self._master_droplet
 		master_config['slave-image'] = self._config['slave-image']
 		master_config['api-key'] = self._config['api-key']
 		master_config['slaves-used'] = self._config['slaves-used']
@@ -106,11 +106,9 @@ class ElasticPowerTAC:
 
 
 		# Clone ElasticPowerTAC-Master 
-		cmd_clone = ['ssh','-o StrictHostKeyChecking=no','root@%s'%self._master_ip,
-		'"git clone --recursive https://github.com/frankyn/ElasticPowerTAC-Master.git"']
+		cmd_clone = ['ssh','-o StrictHostKeyChecking=no',('root@%s'%self._master_ip),
+		'git clone --recursive https://github.com/frankyn/ElasticPowerTAC-Master.git']
 		subprocess.call(cmd_clone)
-
-
 
 		# SCP master.config.json to master server
 		cmd_mcj = ['scp',master_config_file, 
@@ -119,7 +117,7 @@ class ElasticPowerTAC:
 
 		# Run ElasticPowerTAC-Master
 		cmd_run = ['ssh','root@%s'%self._master_ip,
-				   '"screen -A -m -d -S \"master\" \"python ~/ElasticPowerTAC-Master/master.py\""']
+				   'screen -A -m -d -S "master" "python ~/ElasticPowerTAC-Master/master.py"']
 		subprocess.call(cmd_run)
 
 		print("Master has been initialized")
