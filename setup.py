@@ -48,7 +48,7 @@ class ElasticPowerTAC:
 					actions_all_completed = False
 			if not actions_all_completed:
 				# If not finished sleep for 1 minute
-				time.sleep(60)
+				time.sleep(30)
 			else:
 				break
 
