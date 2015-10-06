@@ -117,7 +117,7 @@ class ElasticPowerTAC:
 
 		# Run ElasticPowerTAC-Master
 		cmd_run = ['ssh','root@%s'%self._master_ip,
-				   'screen -A -m -d -S "master" "python ~/ElasticPowerTAC-Master/master.py"']
+				   '"cd ~/ElasticPowerTAC-Master/;python master.py  < /dev/null > /tmp/master-log 2>&1 &"']
 		subprocess.call(cmd_run)
 
 		print("Master has been initialized")
