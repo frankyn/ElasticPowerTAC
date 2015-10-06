@@ -105,20 +105,30 @@ class ElasticPowerTAC:
 			f.write(json.dumps(master_config))
 
 
-		# Clone ElasticPowerTAC-Master 
-		cmd_clone = ['ssh','-o StrictHostKeyChecking=no',('root@%s'%self._master_ip),
-		'git clone --recursive https://github.com/frankyn/ElasticPowerTAC-Master.git']
-		subprocess.call(cmd_clone)
+		# Attempt to ssh over
+		completed = False
+		while not completed:
+			try:
+				# Clone ElasticPowerTAC-Master
+				cmd_clone = ['ssh','-o StrictHostKeyChecking=no',('root@%s'%self._master_ip),
+				'git clone --recursive https://github.com/frankyn/ElasticPowerTAC-Master.git']
+				subprocess.call(cmd_clone)
 
-		# SCP master.config.json to master server
-		cmd_mcj = ['scp',master_config_file, 
-			   	   'root@%s:%s'%(self._master_ip,'~/ElasticPowerTAC-Master/config.json')]
-		subprocess.call(cmd_mcj)
+				# SCP master.config.json to master server
+				cmd_mcj = ['scp',master_config_file,
+						   'root@%s:%s'%(self._master_ip,'~/ElasticPowerTAC-Master/config.json')]
+				subprocess.call(cmd_mcj)
 
-		# Run ElasticPowerTAC-Master
-		cmd_run = ['ssh','root@%s'%self._master_ip,
-				   'cd ~/ElasticPowerTAC-Master/;python master.py  < /dev/null > /tmp/master-log 2>&1 &']
-		subprocess.call(cmd_run)
+				# Run ElasticPowerTAC-Master
+				cmd_run = ['ssh','root@%s'%self._master_ip,
+						   'cd ~/ElasticPowerTAC-Master/;python master.py  < /dev/null > /tmp/master-log 2>&1 &']
+				subprocess.call(cmd_run)
+
+				# We are finished
+				completed = True
+			except:
+				print('Unable to SSH in.. wait another minutes')
+				time.sleep(60)
 
 		print("Master has been initialized")
 
