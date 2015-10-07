@@ -133,25 +133,33 @@ class ElasticPowerTAC:
 				# Clone ElasticPowerTAC-Master
 				cmd_clone = ['ssh','-o StrictHostKeyChecking=no',('root@%s'%self._master_ip),
 				'git clone --recursive https://github.com/frankyn/ElasticPowerTAC-Master.git']
-				subprocess.call(cmd_clone)
+				handle = subprocess.call(cmd_clone)
+				if handle != 0:
+					raise "command error"
 
 				# SCP master.config.json to master server
 				cmd_mcj = ['scp',master_config_file,
 						   'root@%s:%s'%(self._master_ip,'~/ElasticPowerTAC-Master/config.json')]
-				subprocess.call(cmd_mcj)
+				handle = subprocess.call(cmd_mcj)
+				if handle != 0:
+					raise "command error"
 
 				if self._config['google-drive']:
 					# SCP session.json to master server
 					cmd_cpgd = ['scp',self._google_drive_session,
 							   'root@%s:%s'%(self._master_ip,'~/ElasticPowerTAC-Master/%s'%self._google_drive_session)]
-					subprocess.call(cmd_cpgd)
+					handle = subprocess.call(cmd_cpgd)
+					if handle != 0:
+						raise "command error"
 
 
 
 				# Run ElasticPowerTAC-Master
 				cmd_run = ['ssh','root@%s'%self._master_ip,
 						   'cd ~/ElasticPowerTAC-Master/;python master.py  < /dev/null > /tmp/master-log 2>&1 &']
-				subprocess.call(cmd_run)
+				handle = subprocess.call(cmd_run)
+				if handle != 0:
+					raise "command error"
 
 				# We are finished
 				completed = True
