@@ -1,3 +1,6 @@
 [submodule "DigitalOceanAPIv2"]
 	path = DigitalOceanAPIv2
 	url = https://github.com/frankyn/DigitalOceanAPIv2.git
+[submodule "ElasticPowerTAC_GoogleDrivePlugin"]
+	path = ElasticPowerTAC_GoogleDrivePlugin
+	url = https://github.com/frankyn/ElasticPowerTAC_GoogleDrivePlugin.git

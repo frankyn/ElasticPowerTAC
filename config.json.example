@@ -10,6 +10,11 @@
 					"ssh_keys":["234234"]},
 	"api-key":"234234234234",
 	"slaves-used":2,
+	"google-drive": {
+	  "use":true,
+	  "secret": "client_secrets.json",
+	  "parent-id": "0BxAo-cNBQJe_RUg1bWJOSVFMcUU"
+	},
 	"simulations":[{
 		"name":"simulation-name",
 		"simulation":"config-sim-01",

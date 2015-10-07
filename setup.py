@@ -3,6 +3,7 @@ import subprocess
 import json
 import time
 from DigitalOceanAPIv2.docean import DOcean
+from ElasticPowerTAC_GoogleDrivePlugin.googledrive_upload_wrapper import GoogleDriveUpload
 '''
 	Setup PowerTAC Simulations
 	* Creates a DigitalOcean droplet with specified Master image id
@@ -22,6 +23,15 @@ class ElasticPowerTAC:
 		# Create DOcean API Wrapper
 		self._docean = DOcean(self._config['api-key'])
 
+		# Use GoogleDrive Upload API
+		self._google_drive_uploader = None
+		self._google_drive_session = 'google-session.json'
+		# Check if we are using it if so run setup session
+		if self._config['google-drive']:
+			self._setup_session()
+
+
+
 	# load_config
 	def load_config(self):
 		# load from "config.json"
@@ -35,6 +45,11 @@ class ElasticPowerTAC:
 		except:
 			print('config.json must be defined.')
 			exit()
+
+	# Google Drive API Session Setup
+	def _setup_session(self):
+		self._google_drive_uploader = GoogleDriveUpload(self._config['google-drive-secret'],
+														self._google_drive_session)
 
 	# Wait creation process
 	def wait_until_completed(self,droplet_id):
@@ -98,6 +113,12 @@ class ElasticPowerTAC:
 		master_config['api-key'] = self._config['api-key']
 		master_config['slaves-used'] = self._config['slaves-used']
 		master_config['simulations'] = self._config['simulations']
+		if self._config['google-drive']:
+			master_config['google-drive'] = self._config['google-drive']
+			master_config['master-droplet-id'] = self._master_droplet
+		else:
+			master_config['google-drive'] = False
+
 		master_config_file = 'master.config.json'
 
 		# Create necessary config.json file for master
@@ -118,6 +139,14 @@ class ElasticPowerTAC:
 				cmd_mcj = ['scp',master_config_file,
 						   'root@%s:%s'%(self._master_ip,'~/ElasticPowerTAC-Master/config.json')]
 				subprocess.call(cmd_mcj)
+
+				if self._config['google-drive']:
+					# SCP session.json to master server
+					cmd_cpgd = ['scp',self._google_drive_session,
+							   'root@%s:%s'%(self._master_ip,'~/ElasticPowerTAC-Master/%s'%self._google_drive_session)]
+					subprocess.call(cmd_cpgd)
+
+
 
 				# Run ElasticPowerTAC-Master
 				cmd_run = ['ssh','root@%s'%self._master_ip,
