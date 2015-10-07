@@ -48,7 +48,7 @@ class ElasticPowerTAC:
 
 	# Google Drive API Session Setup
 	def _setup_session(self):
-		self._google_drive_uploader = GoogleDriveUpload(self._config['google-drive-secret'],
+		self._google_drive_uploader = GoogleDriveUpload(self._config['google-drive']['secret'],
 														self._google_drive_session)
 
 	# Wait creation process
