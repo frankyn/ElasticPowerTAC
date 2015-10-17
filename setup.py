@@ -156,13 +156,13 @@ class ElasticPowerTAC:
                 # Create Scenarios location
                 cmd_mkdir = ['ssh',
                             'root@%s'%(self._master_ip),
-                             '"mkdir ~/ElasticPowerTAC-Master/scenarios"']
+                             'mkdir ~/ElasticPowerTAC-Master/scenarios']
                 handle = subprocess.call(cmd_mkdir)
 
                 # Upload Scenarios
                 for scenario_file in self._config['scenario-files']:
                     cmd_cpsc = ['scp',scenario_file,
-                                'root@%s:%s'%(self._master_ip,'~/ElasticPowerTAC-Master/scenarios/%s'%scenario_file)]
+                                'root@%s:%s'%(self._master_ip,'~/ElasticPowerTAC-Master/%s'%scenario_file)]
                     handle = subprocess.call(cmd_cpsc)
 
 
